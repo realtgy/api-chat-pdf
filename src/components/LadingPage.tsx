@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-
+import { BookOpenCheck, Facebook, Twitter, Youtube } from "lucide-react";
 export default function LandingPage() {
   return (
     <>
@@ -129,6 +129,97 @@ export default function LandingPage() {
           <Button variant="orange">Sign up for free.</Button>
         </div>
       </section>
+
+      <footer className="section-container">
+        <div className="max-auto max-w-7xl px-8 md:px-6">
+          {/* Row 1 */}
+          <div className="md:flex gap-2 md:justify-between">
+            {/* Logo */}
+            <div className="flex items-start mb-6 ">
+              <BookOpenCheck className="w-8 h-8 mr-3" />
+              <span className="text-xl font-medium">PDF.wisdom</span>
+            </div>
+            {/* Links*/}
+            <div className="grid grid-cols-3 gap-x-20">
+              <div>
+                <h2 className="mb-4 text-sm font-medium">Products</h2>
+                <div className="flex flex-col text-sm text-gray-400 space-y-2">
+                  <a href="#" className="hover:underline">
+                    User cases
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Chrome Extension
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Blog
+                  </a>
+                  <a href="#" className="hover:underline">
+                    FAQ
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="mb-4 text-sm font-medium">Company</h2>
+                <div className="flex flex-col text-sm text-gray-400 space-y-2">
+                  <a href="#" className="hover:underline">
+                    PDF.ai vs ChatPDF
+                  </a>
+                  <a href="#" className="hover:underline">
+                    PDF.ai vs Acrobat Reader
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Legal
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Affiliate program 💵
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Investor
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="mb-4 text-sm font-medium">We also built</h2>
+                <div className="flex flex-col text-sm text-gray-400 space-y-2">
+                  <a href="#" className="hover:underline">
+                    Resume AI scanner
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Invoice AI scanner
+                  </a>
+                  <a href="#" className="hover:underline">
+                    Quiz AI generator
+                  </a>
+                  <a href="#" className="hover:underline">
+                    QuickyAI
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr className="my-6 border-gray-300 lg:my-8" />
+
+          {/* Row 2 */}
+          <div className="text-sm text-gray-500 sm:flex sm:items-center sm:justify-center">
+            <span>Copyright &copy; 2025, All rights Reserved</span>
+            <div className="flex text-2xl space-x-6 sm:justify-center">
+              <a href="#">
+                <Twitter className="inline-block ml-4 w-5 h-5" />
+              </a>
+
+              <a href="#">
+                <Facebook className="inline-block ml-4 w-5 h-5" />
+              </a>
+              <a href="#">
+                <Youtube className="inline-block ml-4 w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
