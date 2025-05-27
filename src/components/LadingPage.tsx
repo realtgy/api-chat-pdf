@@ -1,5 +1,8 @@
+"use client";
+import React from "react";
 import { Button } from "./ui/button";
 import { BookOpenCheck, Facebook, Twitter, Youtube } from "lucide-react";
+import TypewriterComponent from "typewriter-effect";
 export default function LandingPage() {
   return (
     <>
@@ -12,6 +15,23 @@ export default function LandingPage() {
             <h1 className="max-w-md text-4xl md:text-5xl md:leading-tight">
               Chat with andy PDF document
             </h1>
+            <div className="text-3xl font-light text-orange-400">
+              <TypewriterComponent
+                options={{
+                  strings: [
+                    "Books",
+                    "Scientific papers",
+                    "Finalcial reports",
+                    "Legal agreements",
+                    "Research papers",
+                    "User manuals",
+                    "Product documentation",
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+            </div>
             {/* Descripition */}
             <p className="max-w-md md:max-w-sm text-white/80 font-light leading-7">
               From legal agreements to financial reports, PDF.ai brings your
