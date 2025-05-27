@@ -84,3 +84,7 @@
 .section-container {
   @apply mx-auto max-w-5xl px-8 py-16 md:px-6;
 }
+
+.border-log {
+  @apply border border-border;
+}

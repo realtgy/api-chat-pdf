@@ -1,8 +1,4 @@
-import { Button } from "@/components/ui/button";
+import LandingPage from "@/components/LadingPage";
 export default function Home() {
-  return (
-    <div className="section-container">
-      <Button variant="orange">Click me </Button>
-    </div>
-  );
+  return <LandingPage />;
 }
