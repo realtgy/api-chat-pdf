@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Pencil, File, Trash2, Upload } from "lucide-react";
 import Link from "next/link";
+import UploadPDF from "@/components/UploadPDF";
 export default function Documents() {
   const documents = [
     {
@@ -24,10 +25,7 @@ export default function Documents() {
       <div className="section-container mt-4">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl">Documents</h1>
-          <Button variant="orange">
-            <Upload className="w-4 h-4 mr-2" style={{ strokeWidth: "3" }} />
-            Upload
-          </Button>
+          <UploadPDF />
         </div>
 
         {/* table */}
