@@ -21,7 +21,7 @@ export default function Documents() {
   ];
   return (
     <section className="bg-[#faf9f6] min-h-screen">
-      <div className="section-container">
+      <div className="section-container mt-4">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl">Documents</h1>
           <Button variant="orange">
