@@ -19,6 +19,7 @@ const UploadPDF = () => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Do something with the files
@@ -56,8 +57,31 @@ const UploadPDF = () => {
     setIsButtonEnabled(false);
   };
 
+  const resetForm = () => {
+    setFile(null);
+    setUrl("");
+    setIsButtonEnabled(false);
+  };
+
+  const handleOpenDialog = () => {
+    setOpen(!open);
+    resetForm();
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // handle form submission
+    if (file) {
+      // handle file uploading
+      console.log("The file uploaded: " + file);
+    } else if (url) {
+      // Handle URL input
+      console.log("URL provided: " + url);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenDialog}>
       <DialogTrigger asChild>
         <Button variant="orange">
           <Upload className="w-4 h-4 mr-2" style={{ strokeWidth: "3" }} />
@@ -70,7 +94,7 @@ const UploadPDF = () => {
           <DialogTitle>Upload a document</DialogTitle>
         </DialogHeader>
 
-        <form action="" className="space-y-6">
+        <form action="" className="space-y-6" onSubmit={handleSubmit}>
           <div className="bg-white rounded-xl">
             {/* file drop zone */}
             <div className="border-dashed border-2 rounded-md bg-gray-50 h-36 w-full">
