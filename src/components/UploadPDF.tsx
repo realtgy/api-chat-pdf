@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Upload, UploadCloud } from "lucide-react";
+import { Upload, UploadCloud, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import {
@@ -51,6 +51,11 @@ const UploadPDF = () => {
     setIsButtonEnabled(e.target.value !== "");
   };
 
+  const handleRemoveFile = () => {
+    setFile(null);
+    setIsButtonEnabled(false);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -66,21 +71,34 @@ const UploadPDF = () => {
         </DialogHeader>
 
         <form action="" className="space-y-6">
-          {/* file drop zone */}
-          <div
-            {...getRootProps({
-              className:
-                "border-dashed border-2 rounded-md coursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col",
-            })}
-          >
-            <input {...getInputProps()} />
-            <UploadCloud className="w10 h-10 text-[#ff612f]" />
-            <p className="mt-2 text-sm text-slate-200">
-              Drag and drop a PDF file here or click
-            </p>
-            <span className="mt-2 overflow-hidden whitespace-nowrap text-ellipsis text-sm max-w-[200px]">
-              {file?.name}
-            </span>
+          <div className="bg-white rounded-xl">
+            {/* file drop zone */}
+            <div className="border-dashed border-2 rounded-md bg-gray-50 h-36 w-full">
+              {file ? (
+                <div className="h-full flex justify-center items-center text-black/70 ">
+                  <span className="mt-2 overflow-hidden whitespace-nowrap text-ellipsis text-sm max-w-[200px]">
+                    {file?.name}
+                  </span>
+                  <button
+                    className="ml-1 cursor-pointer"
+                    onClick={handleRemoveFile}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div
+                  {...getRootProps()}
+                  className="h-full flex flex-col justify-center items-center cursor-pointer"
+                >
+                  <input {...getInputProps()} />
+                  <UploadCloud className="w10 h-10 text-[#ff612f]" />
+                  <p className="mt-2 text-sm text-slate-200">
+                    Drag and drop a PDF file here or click
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center">
