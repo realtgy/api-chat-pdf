@@ -1,11 +1,13 @@
-import { Copy, Upload } from "lucide-react";
+"use client";
+
+import { useCallback } from "react";
+import { Upload, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDropzone } from "react-dropzone";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -14,6 +16,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const UploadPDF = () => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    // Do something with the files
+    const pdfFile = acceptedFiles[0];
+    console.log("pdfFile ==>", pdfFile);
+    if (!pdfFile) {
+      alert("Plz uplaod only PDF ile.");
+      return;
+    }
+    if (pdfFile.size > 10 * 1024 * 1024) {
+      // bigger 10 MB
+      alert("Max file size: 10Mb");
+      return;
+    }
+    console.log("acceptedFiles ==>", acceptedFiles);
+  }, []);
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { "application/pdf": [".pdf"] },
+    multiple: false,
+    onDrop,
+  });
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,6 +52,20 @@ const UploadPDF = () => {
         </DialogHeader>
 
         <form action="" className="space-y-6">
+          {/* file drop zone */}
+          <div
+            {...getRootProps({
+              className:
+                "border-dashed border-2 rounded-md coursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col",
+            })}
+          >
+            <input {...getInputProps()} />
+            <UploadCloud className="w10 h-10 text-[#ff612f]" />
+            <p className="mt-2 text-sm text-slate-200">
+              Drag and drop a PDF file here or click
+            </p>
+          </div>
+
           <div className="flex items-center">
             {/* drop upload */}
             <div className="flex-grow border-t border-gray-200"></div>
