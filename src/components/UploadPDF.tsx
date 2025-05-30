@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { generatePreSignedURL } from "@/actions/s3";
 
 const UploadPDF = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -68,15 +69,39 @@ const UploadPDF = () => {
     resetForm();
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const uploadPDFToS3 = async (file: File, putUrl: string) => {
+    const uploadResponse = await fetch(putUrl, {
+      body: file,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/pdf",
+      },
+    });
+
+    console.log("uplaodeReponse ==>", uploadResponse);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // handle form submission
-    if (file) {
-      // handle file uploading
-      console.log("The file uploaded: " + file);
-    } else if (url) {
-      // Handle URL input
-      console.log("URL provided: " + url);
+    try {
+      //
+      // handle form submission
+      // Step: get the pre-signed-url from s3 using server actions
+      // upload pdf file from client to s3
+      if (file) {
+        const putUrl = await generatePreSignedURL(file.name, file.type);
+        console.log("putUrl ==>", putUrl);
+        await uploadPDFToS3(file, putUrl.putUrl);
+        // handle file uploading
+        console.log("The file uploaded: " + file);
+      } else if (url) {
+        // Handle URL input
+        console.log("URL provided: " + url);
+      }
+    } catch (e) {
+    } finally {
+      // reset the form
+      resetForm();
     }
   };
 
