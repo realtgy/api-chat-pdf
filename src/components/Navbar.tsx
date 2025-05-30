@@ -1,14 +1,11 @@
+"use client";
 import React from "react";
 import { Button } from "./ui/button";
 import { ArrowRight, BookOpenCheck } from "lucide-react";
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 export default function Navbar() {
+  const { isSignedIn } = useAuth();
   return (
     <header className="sticky left-0 top-0 z-50 bg-[#f8f5ee] w-full backdrop-blur border-slate-500/19">
       <div className="max-auto h-[60px] max-w-7xl px-8 md:px-6">
@@ -18,18 +15,13 @@ export default function Navbar() {
             <span className="text-lg font-medium text-black">PDF.wisdom</span>
           </div>
 
-          <Button variant="link">
-            Get started
-            <ArrowRight className="ml-1 w-4 h-4" />
-          </Button>
+          <Link href={isSignedIn ? "/documents" : "/sign-up"}>
+            <Button variant="link">
+              Get started
+              <ArrowRight className="ml-1 w-4 h-4" />
+            </Button>
+          </Link>
         </div>
-        <SignedOut>
-          <SignInButton />
-          <SignUpButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
       </div>
     </header>
   );
