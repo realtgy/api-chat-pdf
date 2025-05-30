@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { generatePreSignedURL } from "@/actions/s3";
+import { getPDFFileNameFromURL } from "@/lib/utils";
 
 const UploadPDF = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -38,7 +39,6 @@ const UploadPDF = () => {
     setFile(pdfFile);
     setUrl("");
     setIsButtonEnabled(true);
-    console.log("acceptedFiles ==>", acceptedFiles);
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -69,7 +69,7 @@ const UploadPDF = () => {
     resetForm();
   };
 
-  const uploadPDFToS3 = async (file: File, putUrl: string) => {
+  const uploadPDFToS3 = async (file: File | Blob, putUrl: string) => {
     const uploadResponse = await fetch(putUrl, {
       body: file,
       method: "PUT",
@@ -84,21 +84,27 @@ const UploadPDF = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      //
-      // handle form submission
-      // Step: get the pre-signed-url from s3 using server actions
-      // upload pdf file from client to s3
       if (file) {
         const putUrl = await generatePreSignedURL(file.name, file.type);
-        console.log("putUrl ==>", putUrl);
         await uploadPDFToS3(file, putUrl.putUrl);
-        // handle file uploading
-        console.log("The file uploaded: " + file);
       } else if (url) {
-        // Handle URL input
-        console.log("URL provided: " + url);
+        const response = await fetch(url);
+        const fileName = getPDFFileNameFromURL(url);
+        // const fileSize = Number(response.headers.get("Content-Length"));
+        const fileType = response.headers.get("Content-Type");
+        // 有点脱裤子放屁
+        if (!fileName || fileType !== "application/pdf") {
+          throw new Error("Incorrect file format");
+        }
+        const { putUrl, fileKey } = await generatePreSignedURL(
+          fileName,
+          fileType
+        );
+        const fileBlob = await response.blob();
+        await uploadPDFToS3(fileBlob, putUrl);
       }
     } catch (e) {
+      console.log("errr =>", e);
     } finally {
       // reset the form
       resetForm();
