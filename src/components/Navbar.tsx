@@ -1,6 +1,13 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { ArrowRight, BookOpenCheck } from "lucide-react";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 export default function Navbar() {
   return (
     <header className="sticky left-0 top-0 z-50 bg-[#f8f5ee] w-full backdrop-blur border-slate-500/19">
@@ -16,6 +23,13 @@ export default function Navbar() {
             <ArrowRight className="ml-1 w-4 h-4" />
           </Button>
         </div>
+        <SignedOut>
+          <SignInButton />
+          <SignUpButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
     </header>
   );
