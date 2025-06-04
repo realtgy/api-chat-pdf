@@ -15,7 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { generatePreSignedURL } from "@/actions/s3";
-import { getPDFFileNameFromURL } from "@/lib/utils";
+import { getPDFFileNameFromURL, showToast } from "@/lib/utils";
+import { toast } from "react-toastify";
 
 const UploadPDF = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -28,12 +29,12 @@ const UploadPDF = () => {
     const pdfFile = acceptedFiles[0];
     console.log("pdfFile ==>", pdfFile);
     if (!pdfFile) {
-      alert("Plz uplaod only PDF ile.");
+      showToast("Plz upload only PDF file.");
       return;
     }
     if (pdfFile.size > 10 * 1024 * 1024) {
       // bigger 10 MB
-      alert("Max file size: 10Mb");
+      showToast("Max file size: 10Mb.");
       return;
     }
     setFile(pdfFile);
@@ -104,6 +105,7 @@ const UploadPDF = () => {
         await uploadPDFToS3(fileBlob, putUrl);
       }
     } catch (e) {
+      // showToast()
       console.log("errr =>", e);
     } finally {
       // reset the form
