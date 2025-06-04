@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { generatePreSignedURL } from "@/actions/s3";
 import { getPDFFileNameFromURL, showToast } from "@/lib/utils";
+import { embedPDFToPinecone } from "@/lib/pinecone";
 
 const UploadPDF = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -86,12 +87,16 @@ const UploadPDF = () => {
     setIsLoading(true);
     try {
       if (file) {
-        const putUrl = await generatePreSignedURL(file.name, file.type);
-        await uploadPDFToS3(file, putUrl.putUrl);
+        const { putUrl, fileKey } = await generatePreSignedURL(
+          file.name,
+          file.type
+        );
+        await uploadPDFToS3(file, putUrl);
+        const docs = await embedPDFToPinecone(fileKey);
+        console.log("docs ==>", docs);
       } else if (url) {
         const response = await fetch(url);
         const fileName = getPDFFileNameFromURL(url);
-        // const fileSize = Number(response.headers.get("Content-Length"));
         const fileType = response.headers.get("Content-Type");
         // 有点脱裤子放屁
         if (!fileName || fileType !== "application/pdf") {
@@ -103,6 +108,9 @@ const UploadPDF = () => {
         );
         const fileBlob = await response.blob();
         await uploadPDFToS3(fileBlob, putUrl);
+
+        const docs = await embedPDFToPinecone(fileKey);
+        console.log("docs ==>", docs);
       }
     } catch (e) {
       // showToast()
