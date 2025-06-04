@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Upload, UploadCloud, X } from "lucide-react";
+import { Loader2, Upload, UploadCloud, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
 import {
@@ -16,14 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { generatePreSignedURL } from "@/actions/s3";
 import { getPDFFileNameFromURL, showToast } from "@/lib/utils";
-import { toast } from "react-toastify";
 
 const UploadPDF = () => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Do something with the files
     const pdfFile = acceptedFiles[0];
@@ -84,6 +83,7 @@ const UploadPDF = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       if (file) {
         const putUrl = await generatePreSignedURL(file.name, file.type);
@@ -110,6 +110,7 @@ const UploadPDF = () => {
     } finally {
       // reset the form
       resetForm();
+      setIsLoading(false);
     }
   };
 
@@ -180,8 +181,19 @@ const UploadPDF = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Button type="submit" variant="orange" disabled={!isButtonEnabled}>
-              Upload
+            <Button
+              type="submit"
+              variant="orange"
+              disabled={!isButtonEnabled || isLoading}
+            >
+              {isLoading ? (
+                <Loader2
+                  className="h-5 w-5 text-white/80 animate-spin"
+                  style={{ strokeWidth: "3" }}
+                />
+              ) : (
+                "Upload"
+              )}
             </Button>
             <DialogClose asChild>
               <Button variant="light">Close</Button>
